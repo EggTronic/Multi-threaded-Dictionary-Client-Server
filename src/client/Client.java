@@ -87,6 +87,7 @@ public class Client {
 		dashboard.setEditable(false);
 		dashboard.setBackground(SystemColor.window);
 		dashboard.setBounds(115, 45, 314, 171);
+		dashboard.setLineWrap(true);
 		contentPane.add(dashboard);
 		
 		wordTextField.setBounds(115, 228, 314, 20);
@@ -200,7 +201,7 @@ public class Client {
 	private boolean meaningValidator(String meaning) {
 		return ((!meaning.equals("")) 
 	            && (meaning != null))
-				&& (meaning.length()<100);
+				&& (meaning.length()<300);
 	}
 	
 	private void requestHandler(String [] data){
