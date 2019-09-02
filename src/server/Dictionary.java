@@ -10,6 +10,7 @@ public class Dictionary {
 	
 	private Dictionary() {};
 	
+	@SuppressWarnings("unchecked")
 	public static Dictionary getInstance() throws IOException, ClassNotFoundException {
 		File dictFile=new File("dictionary");
 		if (dictFile.createNewFile())
