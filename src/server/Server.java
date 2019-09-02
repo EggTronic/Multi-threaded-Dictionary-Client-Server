@@ -1,9 +1,14 @@
+/** 
+ * Name: Yang Xu
+ * StudentID: 961717
+ * COMP90015 Project 1
+ */
+
 package server;
-//import java.io.DataInputStream;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-//import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -20,7 +25,7 @@ public class Server {
 	// Read and Write lock to control clients' access to the dictionary object
 	private static ReadWriteLock lock = new java.util.concurrent.locks.ReentrantReadWriteLock();
 
-	public static void main(String[] args) throws ClassNotFoundException
+	public static void main(String[] args)
 	{	
 		
 		ServerSocketFactory factory = ServerSocketFactory.getDefault();
@@ -30,34 +35,41 @@ public class Server {
 		{	
 			Dictionary dict = Dictionary.getInstance();
 			
-			System.out.println("Waiting for client connection-");
-			
-			// Wait for client connections.
-			while(true)
-			{
-				Socket client = server.accept();
-				System.out.println("New client request");
-							
-				// Start a new thread for each client request
-				Thread t = new Thread(() -> {
-					try {
+			if (dict == null) {
+				// Failed to get dictionary instance
+				System.out.println("Please try to debug the issue and restart the server");
+				System.out.println("Server is now closed!");
+			} else {
+				System.out.println("Waiting for client connection-");
+				
+				// Wait for client connections.
+				while(true)
+				{
+					Socket client = server.accept();
+					System.out.println("New client request");
+								
+					// Start a new thread for each client request
+					Thread t = new Thread(() -> {
 						serveClient(client, dict);
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					}
-				});
-				t.start();
+					});
+					t.start();
+				}
 			}
-			
 		} 
 		catch (IOException e)
-		{
+		{	
+			System.out.println("Failed to init socket server: IOException");
 			e.printStackTrace();
 		}
 		
 	}
 	
-	private static void serveClient(Socket client, Dictionary dict) throws ClassNotFoundException
+	/**
+	 * Thread for handling each client request
+	 * @param client
+	 * @param dict
+	 */
+	private static void serveClient(Socket client, Dictionary dict)
 	{
 		try(Socket clientSocket = client)
 		{
@@ -73,7 +85,13 @@ public class Server {
 		    output.flush();
 		} 
 		catch (IOException e) 
+		{	
+			System.out.println("Failed to init socket server thread: IOException");
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) 
 		{
+			System.out.println("Failed to init socket server thread: Dictionary Class not found");
 			e.printStackTrace();
 		}
 	}
@@ -120,8 +138,9 @@ public class Server {
 			} finally {
 				lock.writeLock().unlock();
 			}
-			
+		  
 		  default:
+			System.out.println("Invalid request from client");
 			return "invalid request method";
 		}
 	}

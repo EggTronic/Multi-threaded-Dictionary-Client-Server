@@ -1,3 +1,9 @@
+/** 
+ * Name: Yang Xu
+ * StudentID: 961717
+ * COMP90015 Project 1
+ */
+
 package client;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -183,11 +189,13 @@ public class Client {
 		    }
 		} 
 		catch (UnknownHostException e)
-		{
+		{	
+			System.out.println("Failed to handle request: UnknownHostException");
 			e.printStackTrace();
 		}
 		catch (IOException e) 
-		{
+		{	
+			System.out.println("Failed to handle request: IOException");
 			e.printStackTrace();
 		}
 	}

@@ -1,35 +1,58 @@
+/** 
+ * Name: Yang Xu
+ * StudentID: 961717
+ * COMP90015 Project 1
+ */
+
 package server;
 import java.util.*;
 import java.io.*;
 
 public class Dictionary {
 	static HashMap<String, String> dictionary = new HashMap<String, String>();
-	//static boolean lock = false;
-	
+
 	private static Dictionary dict = new Dictionary();
 	
 	private Dictionary() {};
 	
 	@SuppressWarnings("unchecked")
-	public static Dictionary getInstance() throws IOException, ClassNotFoundException {
-		File dictFile=new File("dictionary");
-		if (dictFile.createNewFile())
-		{	
-			// create the dictionary file
-		    System.out.println("Dict is created!");
-		} else {
-			// load from source
-			FileInputStream fis=new FileInputStream(dictFile);
-	        ObjectInputStream ois=new ObjectInputStream(fis);
-	        
-	        dictionary = (HashMap<String, String>)ois.readObject();
-	        
-	        ois.close();
-	        fis.close();
-	        
-		    System.out.println("Dict has been loaded from local!");	    
+	public static Dictionary getInstance() {
+		try 
+		{
+			File dictFile=new File("dictionary");
+			
+			if (dictFile.createNewFile()){	
+				// create new dictionary file if there is not one
+			    System.out.println("Dictionary is created!");
+			} else if (dictFile.length() != 0) {
+				// load from source dictionary file
+				FileInputStream fis=new FileInputStream(dictFile);
+		        ObjectInputStream ois=new ObjectInputStream(fis);
+		        
+		        dictionary = (HashMap<String, String>)ois.readObject();
+		        
+		        ois.close();
+		        fis.close();
+			} 
+			
+			System.out.println("Dictionary has been loaded from local!");	  
+			
+			return dict;
+			
 		} 
-		return dict;
+		catch (IOException e) 
+		{
+			System.out.println("Failed to initialize dictionary instance: IOException");
+			e.printStackTrace();
+			return null;
+			
+		} 
+		catch (ClassNotFoundException e) 
+		{
+			System.out.println("Failed to initialize dictionary instance: Dictionary Class not found");
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**
@@ -99,7 +122,8 @@ public class Dictionary {
 	
 	// Save change to the local dictionary file
 	private boolean save() {
-		try {
+		try 
+		{
 			File dictFile = new File("dictionary");
 			FileOutputStream fos=new FileOutputStream(dictFile);
 			ObjectOutputStream oos=new ObjectOutputStream(fos);
@@ -108,14 +132,16 @@ public class Dictionary {
 	        oos.close();
 	        fos.close();
 	        return true;
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			System.out.println("Failed to save change to the dictionary");
-			System.out.println(e);
+			e.printStackTrace();
 			return false;
 		} 
 	}
 	
-	// FUnction to print the dictionary
+	// Function to print the dictionary
 	public String toString() {
 		String result = "";
 		for(Map.Entry<String,String> m :dictionary.entrySet()){
