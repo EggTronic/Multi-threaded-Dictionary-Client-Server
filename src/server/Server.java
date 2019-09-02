@@ -1,14 +1,9 @@
-/** 
- * Name: Yang Xu
- * StudentID: 961717
- * COMP90015 Project 1
- */
-
 package server;
-
+//import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+//import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -91,7 +86,7 @@ public class Server {
 		}
 		catch (ClassNotFoundException e) 
 		{
-			System.out.println("Failed to init socket server thread: Dictionary Class not found");
+			System.out.println("Failed to init socket server thread: String[] Class not found");
 			e.printStackTrace();
 		}
 	}

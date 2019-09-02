@@ -1,15 +1,10 @@
-/** 
- * Name: Yang Xu
- * StudentID: 961717
- * COMP90015 Project 1
- */
-
 package server;
 import java.util.*;
 import java.io.*;
 
 public class Dictionary {
 	static HashMap<String, String> dictionary = new HashMap<String, String>();
+	//static boolean lock = false;
 
 	private static Dictionary dict = new Dictionary();
 	
@@ -21,10 +16,11 @@ public class Dictionary {
 		{
 			File dictFile=new File("dictionary");
 			
-			if (dictFile.createNewFile()){	
-				// create new dictionary file if there is not one
-			    System.out.println("Dictionary is created!");
-			} else if (dictFile.length() != 0) {
+			if (dictFile.createNewFile())
+			{	
+				// create the dictionary file
+			    System.out.println("Dict is created!");
+			} else {
 				// load from source dictionary file
 				FileInputStream fis=new FileInputStream(dictFile);
 		        ObjectInputStream ois=new ObjectInputStream(fis);
@@ -33,9 +29,9 @@ public class Dictionary {
 		        
 		        ois.close();
 		        fis.close();
+		        
+			    System.out.println("Dict has been loaded from local!");	    
 			} 
-			
-			System.out.println("Dictionary has been loaded from local!");	  
 			
 			return dict;
 			
@@ -49,7 +45,7 @@ public class Dictionary {
 		} 
 		catch (ClassNotFoundException e) 
 		{
-			System.out.println("Failed to initialize dictionary instance: Dictionary Class not found");
+			System.out.println("Failed to initialize dictionary instance: String[] Class not found");
 			e.printStackTrace();
 			return null;
 		}
@@ -64,8 +60,6 @@ public class Dictionary {
 		String result = dictionary.get(word);
 		if  (result == null || result.isEmpty() ) {
 			result = "Word '" + word + "' not found in the dictionary";
-		} else {
-			result = "The meaning of word '" + word + "' is: " + result; 
 		}
 		return result;
 	}
@@ -141,7 +135,7 @@ public class Dictionary {
 		} 
 	}
 	
-	// Function to print the dictionary
+	// FUnction to print the dictionary
 	public String toString() {
 		String result = "";
 		for(Map.Entry<String,String> m :dictionary.entrySet()){

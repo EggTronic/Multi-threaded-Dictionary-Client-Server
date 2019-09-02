@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -30,8 +30,11 @@ public class Client {
 	// Client ID
 	private static String id;
 	
+	private JPanel contentPane;
+	
 	// Global UI component
 	private static JTextField wordTextField = new JTextField(20);
+	private static JTextArea word = new JTextArea();
 	private static JTextArea dashboard = new JTextArea();
 	
 	public Client(String id) {
@@ -40,31 +43,69 @@ public class Client {
 	
 	// UI initlization
 	private void prepareGUI(){
-		JFrame frame = new JFrame("Dictionary");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800,400);
-        
-        JPanel panel = new JPanel(); // the panel is not visible in output
-        
-        JButton searchButton = new JButton("Search");
-        searchButton.addActionListener(new SearchActionListener());
-        JButton removeButton = new JButton("Remove");
-        removeButton.addActionListener(new RemoveActionListener());
-        JButton addButton = new JButton("Add");
-        addButton.addActionListener(new AddActionListener());
-        
-        panel.add(wordTextField);
-        panel.add(searchButton);
-        panel.add(removeButton);
-        panel.add(addButton);
-        
-        
-        dashboard.setEditable(false);
-        dashboard.setFont(new Font("Monaco", Font.BOLD, 20));
-        
-        frame.getContentPane().add(BorderLayout.SOUTH, panel);
-        frame.getContentPane().add(BorderLayout.CENTER, dashboard);
-        frame.setVisible(true);
+		JFrame frame = new JFrame("Dictionary App");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(250, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBackground(SystemColor.activeCaptionBorder);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		frame.setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(5, 125, 0, 0);
+		contentPane.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.setBackground(SystemColor.menu);
+		btnSearch.setForeground(Color.BLACK);
+		btnSearch.setBounds(9, 227, 97, 23);
+		btnSearch.addActionListener(new SearchActionListener());
+		contentPane.add(btnSearch);
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.setBackground(SystemColor.menu);
+		btnAdd.setForeground(Color.BLACK);
+		btnAdd.setBounds(10, 158, 97, 23);
+		btnAdd.addActionListener(new AddActionListener());
+		contentPane.add(btnAdd);
+		
+		JButton btnRemove = new JButton("Remove");
+		btnRemove.setBackground(SystemColor.menu);
+		btnRemove.setForeground(Color.BLACK);
+		btnRemove.setBounds(9, 193, 97, 23);
+		btnRemove.addActionListener(new RemoveActionListener());
+		contentPane.add(btnRemove);
+		
+		word.setBackground(SystemColor.info);
+		word.setEditable(false);
+		word.setBounds(115, 11, 314, 23);
+		word.setFont(new Font("Tahoma", Font.BOLD, 12));
+		contentPane.add(word);
+		
+		dashboard.setEditable(false);
+		dashboard.setBackground(SystemColor.window);
+		dashboard.setBounds(115, 45, 314, 171);
+		contentPane.add(dashboard);
+		
+		wordTextField.setBounds(115, 228, 314, 20);
+		contentPane.add(wordTextField);
+		wordTextField.setColumns(10);
+		
+		JLabel lblWord = new JLabel("Word");
+		lblWord.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblWord.setBackground(SystemColor.controlText);
+		lblWord.setBounds(58, 15, 46, 14);
+		contentPane.add(lblWord);
+		
+		JLabel lblMeaning = new JLabel("Meaning");
+		lblMeaning.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblMeaning.setBounds(40, 49, 60, 14);
+		contentPane.add(lblMeaning);
+		
+		frame.setVisible(true);
+
 	}
 	
 	class SearchActionListener implements ActionListener{
@@ -181,6 +222,7 @@ public class Client {
 		    {	
 		    	if (input.available() > 0) {
 		    		String message = input.readUTF();
+		    		word.setText(wordTextField.getText());
 		    		dashboard.setForeground(Color.BLUE);
 			    	dashboard.setText(message);
 		    		System.out.println("Server response: \n" + message + "\n");
